@@ -758,12 +758,22 @@ namespace portal {
             continue;
           }
 
-          EGLint num_modifiers = 0;
-          EGLuint64KHR mods[MAX_DMABUF_MODIFIERS] = {
-            0,
-          };
-          EGLBoolean external_only;
-          eglQueryDmaBufModifiersEXT(egl_display.get(), dmabuf_formats[i], MAX_DMABUF_MODIFIERS, (EGLuint64KHR *) &mods, &external_only, &num_modifiers);
+          EGLint num_modifiers;
+          EGLuint64KHR external_only;
+          // I know it's a boolean in all sorts of headers,
+          // but it's causing a runtime stack corruption
+          // thus I'd just use EGLuint64KHR instead
+          // TODO: Debug this buggy behavior
+          EGLuint64KHR mods[MAX_DMABUF_MODIFIERS];
+
+          eglQueryDmaBufModifiersEXT(egl_display.get(), dmabuf_formats[i], MAX_DMABUF_MODIFIERS, (EGLuint64KHR *) &mods, (EGLBoolean *) &external_only, &num_modifiers);
+
+          // Print debug info
+          BOOST_LOG(debug) << "DMA-BUF format: "sv << dmabuf_formats[i] << " ("sv << num_modifiers << " modifiers, external_only: "sv << external_only << ")";
+          for (int j = 0; j < num_modifiers; j++) {
+            BOOST_LOG(debug) << "  Modifier "sv << j << ": "sv << mods[j];
+          }
+
           if (num_modifiers > MAX_DMABUF_MODIFIERS) {
             BOOST_LOG(warning) << "Some DMA-BUF modifiers are being ignored"sv;
           }
