@@ -26,11 +26,23 @@
 #define MAX_DMABUF_FORMATS 200
 #define MAX_DMABUF_MODIFIERS 200
 
+// Copied from
+// https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.ScreenCast.html#org-freedesktop-portal-screencast-availablesourcetypes
 #define SOURCE_TYPE_MONITOR 1
-#define CURSOR_MODE_EMBEDDED 2
+#define SOURCE_TYPE_WINDOW 2
+#define SOURCE_TYPE_VIRTUAL 4
 
+// Copied from
+// https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.ScreenCast.html#org-freedesktop-portal-screencast-availablecursormodes
+#define CURSOR_MODE_HIDDEN 1
+#define CURSOR_MODE_EMBEDDED 2
+#define CURSOR_MODE_METADATA 4
+
+// Copied from 
+// https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.RemoteDesktop.html#org-freedesktop-portal-remotedesktop-selectdevices
 #define PERSIST_FORGET 0
 #define PERSIST_WHILE_RUNNING 1
+#define PERSIST_ALWAYS 2
 
 #define PORTAL_NAME "org.freedesktop.portal.Desktop"
 #define PORTAL_PATH "/org/freedesktop/portal/desktop"
