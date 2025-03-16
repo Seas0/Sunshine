@@ -177,6 +177,7 @@ namespace portal {
       g_variant_builder_init(&builder, G_VARIANT_TYPE("(oa{sv})"));
       g_variant_builder_add(&builder, "o", session_path);
       g_variant_builder_open(&builder, G_VARIANT_TYPE("a{sv}"));
+      g_variant_builder_add(&builder, "{sv}", "types", g_variant_new_uint32(7)); // temporarily pass as magic number: 7 = all devices (keyboard | mouse | pen), fix kde complaint
       g_variant_builder_add(&builder, "{sv}", "handle_token", g_variant_new_string(request_token));
       g_variant_builder_add(&builder, "{sv}", "persist_mode", g_variant_new_uint32(PERSIST_WHILE_RUNNING));
       if (restore_token) {
