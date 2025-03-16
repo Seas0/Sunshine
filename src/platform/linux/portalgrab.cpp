@@ -745,8 +745,7 @@ namespace portal {
           BOOST_LOG(warning) << "Some DMA-BUF formats are being ignored"sv;
         }
 
-        EGLint i;
-        for (i = 0; i < MIN(num_dmabuf_formats, MAX_DMABUF_FORMATS); i++) {
+        for (EGLint i = 0; i < MIN(num_dmabuf_formats, MAX_DMABUF_FORMATS); i++) {
           uint32_t pw_format = 0;
           for (int n = 0; format_map[n].fourcc != 0; n++) {
             if (format_map[n].fourcc == dmabuf_formats[i]) {
@@ -783,12 +782,18 @@ namespace portal {
           dmabuf_infos[n_dmabuf_infos].modifiers =
             (uint64_t *) g_memdup2(mods, sizeof(uint64_t) * dmabuf_infos[n_dmabuf_infos].n_modifiers);
           ++n_dmabuf_infos;
+
+          if (n_dmabuf_infos >= MAX_DMABUF_FORMATS) {
+            BOOST_LOG(warning) << "Some DMA-BUF formats are being ignored"sv;
+            break;
+          }
         }
       }
 
       return 0;
     }
 
+private:
     platf::mem_type_e mem_type;
     wl::display_t wl_display;
     dbus_t dbus;
@@ -809,6 +814,7 @@ namespace platf {
       return nullptr;
     }
 
+    // Get portal instance
     auto portal = std::make_shared<portal::portal_t>();
     if (portal->init(hwdevice_type, display_name, config)) {
       return nullptr;
